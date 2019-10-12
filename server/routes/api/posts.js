@@ -1,6 +1,6 @@
 const express = require('express');
 const mongodb = require('mongodb');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 //inital app
@@ -13,6 +13,7 @@ const router = express.Router();
 
 //Add posts (login -> set token)
 router.post('/', async (req, res) => {
+  let cookieList = [];
   const posts = await loadPostsCollection();
   await posts.insertOne({
     text: req.body.text,
@@ -22,6 +23,7 @@ router.post('/', async (req, res) => {
 
     .then(result => {
       cookie = res.cookie('user', result.insertedId);
+      // cookie = res.cookie('user', cookieList.push(result.insertedId), { maxAge: 900000, httpOnly: true });
       return cookie;
       // res.cookie('user', result.insertedId);
       // return req.cookies.user;
@@ -63,14 +65,6 @@ router.delete('/:id', async (req, res) => {
 
   const posts = await loadPostsCollection();
   await posts.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
-
-  // jwt.verify(token, 'secretKey', (err, authData) => {
-  //   if (err) {
-  //     res.sendStatus(403);
-  //   } else {
-  //     res.status(200).send(authData.post);
-  //   }
-  // });
 
   res.status(200).send();
 });
