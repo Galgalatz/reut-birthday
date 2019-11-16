@@ -19,7 +19,8 @@ app.use(session({
   name: '',
   proxy: true,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {expires: new Date(253402300000000)} 
 }));
 
 //api/posts -> posts.js
